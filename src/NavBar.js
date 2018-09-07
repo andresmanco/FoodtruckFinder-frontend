@@ -10,6 +10,7 @@ const link = {width: '100px',
 
   const NavBar = props => {
     return (
+
       <div className={`ui inverted green menu navbar`}>
         <a className="item">
           <h2 className="ui header">

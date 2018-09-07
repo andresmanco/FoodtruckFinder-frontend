@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Container from './Container'
@@ -7,7 +7,7 @@ import Login from './Login'
 import SignUp from './SignUp'
 import {BrowserRouter, Route, NavLink} from 'react-router-dom'
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
       <div>
