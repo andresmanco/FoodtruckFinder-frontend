@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
-class Detail extends Component {
-constructor(){
-  super()
+class Detail extends React.Component {
 
 
 
 
-}
 
   render() {
     return (
-
+      ""
 
 
     );
