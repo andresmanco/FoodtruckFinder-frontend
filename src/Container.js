@@ -32,7 +32,6 @@ oneTruck(){
 }
 
 
-
   render() {
     return (
       <div>
