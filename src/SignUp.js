@@ -8,27 +8,27 @@ const SignUp = ()=> {
     <Form onSubmit={()=> console.log('hello')}>
       <Form.Field>
         <label>Name</label>
-        <input name='name' />
+        <input name='name' placeholder='Name' />
       </Form.Field>
       <Form.Field>
         <label>Account Name</label>
-        <input name='account_name' />
+        <input name='account_name' placeholder='Account Name' />
       </Form.Field>
       <Form.Field>
         <label>Password</label>
-        <input name='password' />
+        <input name='password' placeholder='Password' />
       </Form.Field>
       <Form.Field>
         <label>Food Type</label>
-        <input name='food_type' />
+        <input name='food_type' placeholder='Type of food' />
       </Form.Field>
       <Form.Field>
         <label>Description</label>
-        <input name='description' />
+        <input name='description' placeholder='Description' />
       </Form.Field>
       <Form.Field>
         <label>Image</label>
-        <input name='pic' />
+        <input name='pic' placeholder='Image URL' />
       </Form.Field>
       <Form.Field>
         <Checkbox label='I agree to the Terms and Conditions' />
