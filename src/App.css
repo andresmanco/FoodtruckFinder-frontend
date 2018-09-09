@@ -4,6 +4,11 @@
   float: center;
   clear: none;
 } */
+
+.login {
+  left: 35%;
+}
+
 #list {
   background-color: #D3D3D3;
   height: 100%;

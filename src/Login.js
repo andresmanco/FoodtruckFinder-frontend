@@ -3,7 +3,7 @@ import { Button, Checkbox, Form } from 'semantic-ui-react'
 
 const Login = ()=> {
   return (
-    <div className='ui card' style={{padding: '12px',
+    <div className='ui card login' style={{padding: '12px',
     margin: '0 6px 6px'}}>
     <Form>
       <Form.Field>
