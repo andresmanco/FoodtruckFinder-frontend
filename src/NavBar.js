@@ -19,12 +19,14 @@ import { NavLink } from 'react-router-dom'
           exact
           to="/signup"
           className="ui item"
-          activeClassName="ui active item"
-        >
+          activeClassName="ui active item">
           SignUp
         </NavLink>
         {props.user ? (
-          <span className="ui item">Logged in as: {props.user.name}</span>
+          <div>
+            <span className="ui item">Logged in as: {props.user.name}</span>
+            <NavLink>activeClassName="ui active item" className="ui item" exact to="/update"</NavLink>
+          <div/>
         ) : (
           <NavLink
             exact
