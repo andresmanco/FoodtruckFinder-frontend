@@ -26,12 +26,11 @@ class App extends React.Component {
     super();
     this.state = {
       user: null
-      // paintingId: null
     };
   }
 
   fetchUser = () => {
-    requestHelper("http://localhost:3001/me").then(this.updateUser);
+    requestHelper("http://localhost:3001/account").then(this.updateUser);
   };
 
   updateUser = user => {
