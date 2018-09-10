@@ -5,17 +5,13 @@ import { Button, Form } from 'semantic-ui-react'
   constructor(){
    super()
    this.state={
-     name: "",
-     food_type: "",
-     description: "",
-     pic: "",
-     location: "Offline",
+     location: null,
      dishes: [{
-          name: "",
-          pic: "",
-          price: '',
-          description: ""
-      }]
+       name: '',
+       pic: '',
+       price: '',
+       description: ''
+     }]
     }
   }
 
@@ -23,49 +19,64 @@ import { Button, Form } from 'semantic-ui-react'
     console.log('submited');
   }
 
-   handleAddDish = () => {
-  this.setState({
-    proportions: this.state.dishes.concat([{
-        name: "",
-        pic: "",
+  handleAddDish = () => {
+    this.setState({
+      dishes: this.state.dishes.concat([{
+        name: '',
+        pic: '',
         price: '',
-        description: ""
+        description: ''
       }])
-  });
-}
-   handleDishChange = () => {
-    console.log('dish changed')
+    });
   }
+   handleDishChange = (index, e) => {
+    const newDishes = this.state.dishes.map((dish, dishIndex)=>{
+      if(index !== dishIndex)return dish;
+      return {...dish, [e.target.name]: e.target.value}
+      })
+      this.setState({dishes: newDishes})
+  }
+
+  handleRemoveDish = (index) => () => {
+    this.setState({ dishes: this.state.dishes.filter((dish, dishIndex) => index !== dishIndex) });
+  }
+
+
   render(){
     return (
       <div className='ui card login' style={{padding: '12px', margin: '0 6px 6px'}}>
         <Form onSubmit={(e)=> this.handleSubmit(e)}>
           <Form.Field>
-            <label>Name</label>
-            <input name='account_name' placeholder='Account Name' onChange={(e)=>
-              this.setState({[e.target.name]: e.target.value}) } />
-          </Form.Field>
-          <Form.Field>
-            <label>Food Type</label>
-            <input name='account_name' placeholder='Account Name' onChange={(e)=>
-              this.setState({[e.target.name]: e.target.value}) } />
-          </Form.Field>
-          <Form.Field>
-            <label>Description</label>
-            <input name='account_name' placeholder='Account Name' onChange={(e)=>
-              this.setState({[e.target.name]: e.target.value}) } />
-          </Form.Field>
-          <Form.Field>
-            <label>Picture</label>
-            <input name='account_name' placeholder='Account Name' onChange={(e)=>
-              this.setState({[e.target.name]: e.target.value}) } />
-          </Form.Field>
-          <Form.Field>
             <label>Location</label>
-            <input name='food_type' placeholder='Type of food' onChange={(e)=>
+            <input name='location' placeholder='Location' onChange={(e)=>
               this.setState({[e.target.name]: e.target.value}) } />
           </Form.Field>
-           <Button type='submit'>Submit</Button>
+          <h3>Dishes</h3>
+
+        {this.state.dishes.map((dishes, index) => (
+          <React.Fragment>
+            <Form.Field>
+              <label>Name</label>
+              <input name='name' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+            </Form.Field>
+            <Form.Field>
+              <label>Description</label>
+              <input name='description' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+            </Form.Field>
+            <Form.Field>
+              <label>Picture</label>
+              <input name='pic' placeholder='Image URL' onChange={(e)=>this.handleDishChange(index, e)} />
+            </Form.Field>
+            <Form.Field>
+              <label>Price</label>
+              <input name='price' placeholder='Price' onChange={(e)=>this.handleDishChange(index, e)} />
+            </Form.Field>
+            <Button type="button" onClick={this.handleRemoveDish(index)} className="small">-</Button>
+          </React.Fragment>
+        ))}
+            <p><Button onClick={this.handleAddDish}> + </Button></p>
+            <Button type='submit'>Submit</Button>
+
         </Form>
       </div>
     )
