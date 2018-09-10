@@ -4,6 +4,7 @@ import { Button, Checkbox, Form } from 'semantic-ui-react'
 const baseUrl =  "http://localhost:3001"
 const Login = (props)=> {
 
+debugger
   function handleSubmit(e) {
       e.preventDefault();
       let data = JSON.stringify({
@@ -29,6 +30,7 @@ const Login = (props)=> {
           props.updateUser(json.user);
           localStorage.setItem("token", json.token);
         });
+      props.history.push('/')
     };
 
 
