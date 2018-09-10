@@ -5,7 +5,7 @@ import NavBar from './NavBar'
 import Login from './Login'
 import SignUp from './SignUp'
 import UpdateForm from './UpdateForm'
-import {BrowserRouter, Route} from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 
 const requestHelper = url =>
   fetch(url, {
@@ -29,6 +29,10 @@ class App extends React.Component {
     };
   }
 
+  clearUser =()=>{
+    this.setState({user: null})
+  }
+
   fetchUser = () => {
     requestHelper("http://localhost:3001/account").then(this.updateUser);
   };
@@ -38,15 +42,18 @@ class App extends React.Component {
   };
 
   render() {
+    
     return (
       <div>
         <BrowserRouter>
           <React.Fragment>
-            <NavBar user={ this.state.user }/>
+            <Route path='/' render={(props)=><NavBar {...props} clearUser= {this.clearUser} user={this.state.user} />} />
             <Route exact path="/" component={TruckContainer} />
             <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/login" render={()=> <Login updateUser= {this.updateUser} />} />
+            <Route exact path="/login" render={(props)=> <Login {...props} updateUser= {this.updateUser} />} />
+          {this.state.user ?
             <Route exact path="/update" component={UpdateForm} />
+            : null}
           </React.Fragment>
         </BrowserRouter>
       </div>
