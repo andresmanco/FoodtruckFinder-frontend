@@ -1,23 +1,73 @@
 import React, {Component} from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
- class Update extends Component {
+const baseUrl =  "http://localhost:3001"
+
+class Update extends Component {
   constructor(){
-   super()
-   this.state={
-     location: null,
-     dishes: [{
-       name: '',
-       pic: '',
-       price: '',
-       description: ''
-     }]
+    super()
+    this.state={
+      location: null,
+      dishes: []
     }
   }
 
-  handleSubmit = ()=>{
-    console.log('submited');
+
+  updateFetch =(dish)=>{
+    fetch(baseUrl+'/dishes/'+dish.id, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json',
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        name: dish.name,
+        description: dish.description,
+        price: dish.price,
+        pic: dish.pic
+      })
+    }).then(res => {
+      if (res.status === 401) {
+        alert("login failed");
+      } else {
+        res.json()
+      }
+    }).then(dish=> console.log(dish))
   }
+
+  createFetch=(dish)=>{
+    fetch(baseUrl + "/login", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        name: dish.name,
+        description: dish.description,
+        price: dish.price,
+        pic: dish.pic
+      })
+    })
+      .then(res => {
+        if (res.status === 401) {
+          alert("login failed");
+        } else {
+          return res.json();
+        }
+      }).then(dish => console.log(dish)
+      });
+    };
+
+  }
+
+
+  componentDidMount = ()=>{
+    this.props.requestHelper(baseUrl+'/my-dishes').then(myDishes=> this.setState({dishes: [...this.state.dishes, ...myDishes]}))
+  }
+
 
   handleAddDish = () => {
     this.setState({
@@ -42,6 +92,13 @@ import { Button, Form } from 'semantic-ui-react'
   }
 
 
+  handleSubmit = (e)=>{
+    e.preventDefault()
+    alert('Your Dishes were updated')
+    this.props.history.push('/')
+  }
+
+
   render(){
     return (
       <div className='ui card login' style={{padding: '12px', margin: '0 6px 6px'}}>
@@ -57,19 +114,19 @@ import { Button, Form } from 'semantic-ui-react'
           <React.Fragment>
             <Form.Field>
               <label>Name</label>
-              <input name='name' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dishes.name} name='name' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Description</label>
-              <input name='description' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dishes.description} name='description' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Picture</label>
-              <input name='pic' placeholder='Image URL' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dishes.pic} name='pic' placeholder='Image URL' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Price</label>
-              <input name='price' placeholder='Price' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dishes.price} name='price' placeholder='Price' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Button type="button" onClick={this.handleRemoveDish(index)} className="small">-</Button>
           </React.Fragment>
