@@ -12,9 +12,9 @@ class Update extends Component {
     }
   }
 
-
-  updateFetch =(dish)=>{
-    fetch(baseUrl+'/dishes/'+dish.id, {
+  updateDishFetch =(dishes)=>{
+    
+    fetch(`${baseUrl}/my-dishes-update`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -22,52 +22,28 @@ class Update extends Component {
         Accept: "application/json"
       },
       body: JSON.stringify({
-        name: dish.name,
-        description: dish.description,
-        price: dish.price,
-        pic: dish.pic
+      dishes: dishes
       })
-    }).then(res => {
-      if (res.status === 401) {
-        alert("login failed");
-      } else {
-        res.json()
-      }
-    }).then(dish=> console.log(dish))
+    }).then(r=>r.json()).then(json=>console.log(json))
   }
 
-  createFetch=(dish)=>{
-    fetch(baseUrl + "/login", {
-      method: "POST",
+  updateLocationFetch =(location)=>{
+    fetch(baseUrl + '/truck-update', {
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Accept: "application/json"
       },
       body: JSON.stringify({
-        name: dish.name,
-        description: dish.description,
-        price: dish.price,
-        pic: dish.pic
+        location: location
       })
     })
-      .then(res => {
-        if (res.status === 401) {
-          alert("login failed");
-        } else {
-          return res.json();
-        }
-      }).then(dish => console.log(dish)
-      });
-    };
-
   }
-
 
   componentDidMount = ()=>{
     this.props.requestHelper(baseUrl+'/my-dishes').then(myDishes=> this.setState({dishes: [...this.state.dishes, ...myDishes]}))
   }
-
 
   handleAddDish = () => {
     this.setState({
@@ -82,18 +58,31 @@ class Update extends Component {
    handleDishChange = (index, e) => {
     const newDishes = this.state.dishes.map((dish, dishIndex)=>{
       if(index !== dishIndex)return dish;
-      return {...dish, [e.target.name]: e.target.value}
+        return {...dish, [e.target.name]: e.target.value}
       })
-      this.setState({dishes: newDishes})
+    this.setState({dishes: newDishes})
   }
 
-  handleRemoveDish = (index) => () => {
+  handleRemoveDish = (index, dishId= null) => {
     this.setState({ dishes: this.state.dishes.filter((dish, dishIndex) => index !== dishIndex) });
+    dishId === null ? null : this.deleteDish(dishId)
   }
 
+  deleteDish= (id)=>{
+    fetch(baseUrl + "/dishes/" + id, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    })
+  }
 
   handleSubmit = (e)=>{
     e.preventDefault()
+    this.updateLocationFetch(this.state.location)
+    this.updateDishFetch(this.state.dishes)
     alert('Your Dishes were updated')
     this.props.history.push('/')
   }
@@ -102,7 +91,7 @@ class Update extends Component {
   render(){
     return (
       <div className='ui card login' style={{padding: '12px', margin: '0 6px 6px'}}>
-        <Form onSubmit={(e)=> this.handleSubmit(e)}>
+        <Form>
           <Form.Field>
             <label>Location</label>
             <input name='location' placeholder='Location' onChange={(e)=>
@@ -110,29 +99,31 @@ class Update extends Component {
           </Form.Field>
           <h3>Dishes</h3>
 
-        {this.state.dishes.map((dishes, index) => (
+        {this.state.dishes.map((dish, index) => (
           <React.Fragment>
             <Form.Field>
               <label>Name</label>
-              <input value={dishes.name} name='name' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dish.name} name='name' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Description</label>
-              <input value={dishes.description} name='description' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dish.description} name='description' placeholder='Account Name' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Picture</label>
-              <input value={dishes.pic} name='pic' placeholder='Image URL' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dish.pic} name='pic' placeholder='Image URL' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
             <Form.Field>
               <label>Price</label>
-              <input value={dishes.price} name='price' placeholder='Price' onChange={(e)=>this.handleDishChange(index, e)} />
+              <input value={dish.price} name='price' placeholder='Price' onChange={(e)=>this.handleDishChange(index, e)} />
             </Form.Field>
-            <Button type="button" onClick={this.handleRemoveDish(index)} className="small">-</Button>
+            <Button type="button" onClick={()=>{
+              dish.id ? this.handleRemoveDish(index, dish.id)
+              : this.handleRemoveDish(index)}} className="small">Delete</Button>
           </React.Fragment>
         ))}
             <p><Button onClick={this.handleAddDish}> + </Button></p>
-            <Button type='submit'>Submit</Button>
+            <Button onClick={(e)=> this.handleSubmit(e)} type='submit'>Submit</Button>
 
         </Form>
       </div>
