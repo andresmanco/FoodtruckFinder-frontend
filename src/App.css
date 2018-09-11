@@ -1,9 +1,6 @@
-/* #truckContainer {
-  height: 100%;
-  width: 800px;
-  float: center;
-  clear: none;
-} */
+.navbar {
+   margin : 0 !important;
+  }
 
 .login {
   left: 35%;
@@ -19,9 +16,10 @@
 
 #card {
   height: 100%;
-  width: 300px;
+  width: 60%;
   float: right;
   clear: none;
+  margin-top: 100px;
 }
 
 .popup {
