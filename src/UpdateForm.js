@@ -13,7 +13,6 @@ class Update extends Component {
   }
 
   updateDishFetch =(dishes)=>{
-    
     fetch(`${baseUrl}/my-dishes-update`, {
       method: "PATCH",
       headers: {

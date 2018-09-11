@@ -37,6 +37,12 @@ class App extends React.Component {
     requestHelper("http://localhost:3001/account").then(this.updateUser);
   };
 
+  componentDidMount() {
+    if (localStorage.getItem("token")) {
+      this.fetchUser();
+    }
+  }
+
   updateUser = user => {
     this.setState({ user });
   };
